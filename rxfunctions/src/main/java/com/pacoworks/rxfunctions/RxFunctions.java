@@ -1,32 +1,41 @@
 /*
- * Copyright (c) pakoito 2016
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *  * Copyright (c) pakoito 2016
+ *  *
+ *  * Licensed under the Apache License, Version 2.0 (the "License");
+ *  * you may not use this file except in compliance with the License.
+ *  * You may obtain a copy of the License at
+ *  *
+ *  *    http://www.apache.org/licenses/LICENSE-2.0
+ *  *
+ *  * Unless required by applicable law or agreed to in writing, software
+ *  * distributed under the License is distributed on an "AS IS" BASIS,
+ *  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  * See the License for the specific language governing permissions and
+ *  * limitations under the License.
  *
- *    http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
  */
 
 package com.pacoworks.rxfunctions;
 
 import rx.Observable;
-import rx.functions.Func1;
-import rx.functions.Func2;
-import rx.functions.Func3;
-import rx.functions.Func4;
-import rx.functions.Func6;
-import rx.functions.Func7;
-import rx.functions.Func8;
-import rx.functions.Func9;
+import rx.functions.*;
 
 public final class RxFunctions {
+    private static final Func2<Boolean, Boolean, Boolean> AND = new Func2<Boolean, Boolean, Boolean>() {
+        @Override
+        public Boolean call(Boolean first, Boolean second) {
+            return first && second;
+        }
+    };
+
+    private static final Func2<Boolean, Boolean, Boolean> OR = new Func2<Boolean, Boolean, Boolean>() {
+        @Override
+        public Boolean call(Boolean first, Boolean second) {
+            return first || second;
+        }
+    };
+
     public RxFunctions() {
     }
 
@@ -494,18 +503,4 @@ public final class RxFunctions {
             }
         };
     }
-
-    private static final Func2<Boolean, Boolean, Boolean> AND = new Func2<Boolean, Boolean, Boolean>() {
-        @Override
-        public Boolean call(Boolean first, Boolean second) {
-            return first && second;
-        }
-    };
-
-    private static final Func2<Boolean, Boolean, Boolean> OR = new Func2<Boolean, Boolean, Boolean>() {
-        @Override
-        public Boolean call(Boolean first, Boolean second) {
-            return first || second;
-        }
-    };
 }
