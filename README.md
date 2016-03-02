@@ -102,7 +102,7 @@ Add as a dependency to your `build.gradle`
     
     dependencies {
         ...
-        compile 'com.github.pakoito:RxFunctions:1.0.+'
+        compile 'com.github.pakoito:RxFunctions:1.0.0'
         ...
     }
 
