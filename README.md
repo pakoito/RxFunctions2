@@ -60,11 +60,11 @@ Not negates the result of a `Func1<T, Boolean>` to allow the creation of opposit
 
 #### And
 
-And aggregates the result of any number of `Func1<T, Boolean>` by means of &&. This helps composing more fine-grained filters into a single operation.
+And aggregates the result of any number of `Func1<T, Boolean>` by means of `&&`. This helps composing more fine-grained filters into a single operation.
 
 #### Or
 
-And aggregates the result of any number of `Func1<T, Boolean>` by means of ||. This helps composing more fine-grained filters into a single operation.
+And aggregates the result of any number of `Func1<T, Boolean>` by means of `||`. This helps composing more fine-grained filters into a single operation.
 
 ## Examples
 
