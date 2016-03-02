@@ -46,7 +46,7 @@ Reduce is the most complicated to understand, as it allows for incremental compo
 
 Each function will be applied individually to the initial value by using the aggregation function until the last one gives the final result.
 
-One example is the composition `and()` described below. It represents an operation of type `Func1<T, Boolean>`, which takes a n initial value of true, a set of functions returning booleans, and applies aggregation by doing `&&` between them.
+One example is the composition `and()` described below. It represents an operation of type `Func1<T, Boolean>`, which takes an initial value of true, a set of functions returning booleans, and applies aggregation by doing `&&` between them.
 
 The end result is a function `Func1<T, R>` that has one input object, and returns the result of the internal aggregation.
 
