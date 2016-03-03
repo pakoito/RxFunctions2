@@ -34,7 +34,7 @@ public final class RxFunctions {
         }
     };
 
-    public RxFunctions() {
+    private RxFunctions() {
     }
 
     public static <T> Func1<T, T> same(final Func1<T, T> func1, final Func1<T, T> func2) {
