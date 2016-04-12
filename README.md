@@ -68,7 +68,7 @@ And aggregates the result of any number of `Func1<T, Boolean>` by means of `||`.
 
 ## Examples
 
-```
+```java
 Func1<Integer, Integer> INCREMENT = num -> num + 1;
 Func1<Integer, Integer> SUM_FOUR =
                         RxFunctions.<Integer>same(INCREMENT, INCREMENT, INCREMENT, INCREMENT).call(0) // returns 4
@@ -81,7 +81,7 @@ Func1<Integer, String> ROUND TRIPS =
 
 Or more complex cases:
 
-```
+```java
 Func1<User, Boolean> BEST_USERS_FILTER =
                             RxFunctions.and(NOT_NULL,
                                             RxFunctions.not(IS_DEACTIVATED)
@@ -93,33 +93,34 @@ List<User> bestUsersList = getUserList().filter(BEST_USERS_FILTER).toList().toBl
 ## Distribution
 
 Add as a dependency to your `build.gradle`
-
-    repositories {
-        ...
-        maven { url "https://jitpack.io" }
-        ...
-    }
+```groovy
+repositories {
+    ...
+    maven { url "https://jitpack.io" }
+    ...
+}
     
-    dependencies {
-        ...
-        compile 'com.github.pakoito:RxFunctions:1.0.0'
-        ...
-    }
-
+dependencies {
+    ...
+    compile 'com.github.pakoito:RxFunctions:1.0.0'
+    ...
+}
+```
 or to your `pom.xml`
+```xml
+<repositories>
+    <repository>
+        <id>jitpack.io</id>
+        <url>https://jitpack.io</url>
+    </repository>
+</repositories>
 
-    <repositories>
-        <repository>
-            <id>jitpack.io</id>
-            <url>https://jitpack.io</url>
-        </repository>
-    </repositories>
-    
-    <dependency>
-        <groupId>com.github.pakoito</groupId>
-        <artifactId>RxFunctions</artifactId>
-        <version>1.0.0</version>
-    </dependency>
+<dependency>
+    <groupId>com.github.pakoito</groupId>
+    <artifactId>RxFunctions</artifactId>
+    <version>1.0.0</version>
+</dependency>
+```
 
 ## License
 
