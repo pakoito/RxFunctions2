@@ -2,7 +2,7 @@
 
 RxFunctions2 is a library to smooth RxJava usage by functionally composing functions.
 
-For the RxJava 1.X version please go to [RxFunctions](https://github.com/pakoito/RxFunctions)
+For the RxJava 1.X version please go to [RxFunctions](https://github.com/pakoito/RxFunctions).
 
 ## Rationale
 
@@ -54,7 +54,7 @@ The end result is a function `Function<T, R>` that has one input object, and ret
 
 ### Boolean functions
 
-The next composers work only for `Function<T, Boolean>`.
+The next composers work only both `Function<T, Boolean>` and `Predicate<T>`.
 
 #### Not
 
@@ -62,11 +62,11 @@ Not negates the result of a `Function<T, Boolean>` to allow the creation of oppo
 
 #### And
 
-And aggregates the result of any number of `Function<T, Boolean>` by means of `&&`. This helps composing more fine-grained filters into a single operation.
+And aggregates the result of any number of `Function<T, Boolean>` by means of `&&`. This helps composing more fine-grained filters into a single operation. When using `Predicate<T>` the condition is tested until first failure, whereas `Function<T, Boolean>` checks all conditions.
 
 #### Or
 
-And aggregates the result of any number of `Function<T, Boolean>` by means of `||`. This helps composing more fine-grained filters into a single operation.
+And aggregates the result of any number of `Function<T, Boolean>` by means of `||`. This helps composing more fine-grained filters into a single operation. When using `Predicate<T>` the condition is tested until first failure, whereas `Function<T, Boolean>` checks all conditions.
 
 ## Examples
 
@@ -84,12 +84,12 @@ Function<Integer, String> ROUND TRIPS =
 Or more complex cases:
 
 ```java
-Function<User, Boolean> BEST_USERS_FILTER =
+Predicate<User> BEST_USERS_FILTER =
                             RxFunctions.and(NOT_NULL,
                                             RxFunctions.not(IS_DEACTIVATED)
                                             RxFunctions.or(HAS_MANY_PURCHASES,
                                                             IS_HIGH_INCOME));
-List<User> bestUsersList = getUserList().filter(BEST_USERS_FILTER).toList().toBlocking().first();
+List<User> bestUsersList = getUserList().filter(BEST_USERS_FILTER).toList().blockingGet();
 ```
 
 ## Distribution
