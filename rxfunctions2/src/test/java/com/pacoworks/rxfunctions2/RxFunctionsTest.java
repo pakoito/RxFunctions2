@@ -18,46 +18,56 @@ package com.pacoworks.rxfunctions2;
 
 import org.junit.Assert;
 import org.junit.Test;
-import rx.Observable;
-import rx.functions.*;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.concurrent.Callable;
+
+import io.reactivex.Observable;
+import io.reactivex.Single;
+import io.reactivex.functions.BiConsumer;
+import io.reactivex.functions.BiFunction;
+import io.reactivex.functions.Function;
+import io.reactivex.functions.Function4;
+import io.reactivex.functions.Predicate;
 
 public class RxFunctionsTest {
+
     @Test
     public void testSame() throws Exception {
         final int start = 0;
-        int separate = INCREMENT.call(INCREMENT.call(INCREMENT.call(INCREMENT.call(start))));
-        int chain = RxFunctions.same(INCREMENT, INCREMENT, INCREMENT, INCREMENT).call(start);
+        int separate = INCREMENT.apply(INCREMENT.apply(INCREMENT.apply(INCREMENT.apply(start))));
+        int chain = RxFunctions.same(INCREMENT, INCREMENT, INCREMENT, INCREMENT).apply(start);
         Assert.assertEquals(separate, chain);
     }
 
     @Test
     public void testChain() throws Exception {
         final int start = 0;
-        int separate = TO_INT.call(TO_STRING.call(TO_INT.call(TO_STRING.call(start))));
-        int chain = RxFunctions.chain(TO_STRING, TO_INT, TO_STRING, TO_INT).call(start);
+        int separate = TO_INT.apply(TO_STRING.apply(TO_INT.apply(TO_STRING.apply(start))));
+        int chain = RxFunctions.chain(TO_STRING, TO_INT, TO_STRING, TO_INT).apply(start);
         Assert.assertEquals(separate, chain);
     }
 
     @Test
     public void testCombine() throws Exception {
-        User separate = TO_USER.call(TO_STRING.call(55), TO_STRING.call(55), IDENTITY.call(55), IDENTITY.call(55));
+        User separate = TO_USER.apply(TO_STRING.apply(55), TO_STRING.apply(55), IDENTITY.apply(55), IDENTITY.apply(55));
         User chain = RxFunctions.combine(TO_STRING, TO_STRING, IDENTITY, IDENTITY, TO_USER)
-                .call(55);
+                .apply(55);
         Assert.assertEquals(separate, chain);
     }
 
     @Test
     public void testReduce() throws Exception {
         for (int i = 0; i < ITERATIONS; i++) {
-            Collections.shuffle(USER_NAMES);
-            final Observable<User> userList = Observable.from(USER_NAMES).map(NAME_TO_USER).cache();
-            List<User> separated = userList.filter(CORRECT_NAME).filter(IS_RETIRED)
-                    .filter(IS_HIGH_INCOME).toList().toBlocking().first();
-            final Func1<User, Boolean> mergeFilter = RxFunctions.reduce(true, AND, CORRECT_NAME,
-                    IS_RETIRED, IS_HIGH_INCOME);
-            List<User> chained = userList.filter(mergeFilter).toList().toBlocking().first();
+            final Observable<Integer> value = Observable.just(0).cache();
+            Integer separated = value.map(INCREMENT).map(INCREMENT).map(INCREMENT).blockingFirst();
+            final Function<Integer, Integer> mergeIncrement = RxFunctions.reduce(0, BI_SUM, INCREMENT,
+                    INCREMENT, INCREMENT);
+            Integer chained = value.map(mergeIncrement).blockingFirst();
             Assert.assertEquals(separated, chained);
         }
     }
@@ -66,12 +76,12 @@ public class RxFunctionsTest {
     public void testAnd() throws Exception {
         for (int i = 0; i < ITERATIONS; i++) {
             Collections.shuffle(USER_NAMES);
-            final Observable<User> userList = Observable.from(USER_NAMES).map(NAME_TO_USER).cache();
+            final Observable<User> userList = Observable.fromIterable(USER_NAMES).map(NAME_TO_USER).cache();
             List<User> separated = userList.filter(CORRECT_NAME).filter(IS_RETIRED)
-                    .filter(IS_HIGH_INCOME).toList().toBlocking().first();
-            final Func1<User, Boolean> mergeFilter = RxFunctions.and(CORRECT_NAME, IS_RETIRED,
+                    .filter(IS_HIGH_INCOME).toList().blockingGet();
+            final Predicate<User> mergeFilter = RxFunctions.and(CORRECT_NAME, IS_RETIRED,
                     IS_HIGH_INCOME);
-            List<User> chained = userList.filter(mergeFilter).toList().toBlocking().first();
+            List<User> chained = userList.filter(mergeFilter).toList().blockingGet();
             Assert.assertEquals(separated, chained);
         }
     }
@@ -80,22 +90,22 @@ public class RxFunctionsTest {
     public void testOr() throws Exception {
         for (int i = 0; i < ITERATIONS; i++) {
             Collections.shuffle(USER_NAMES);
-            final Observable<User> userList = Observable.from(USER_NAMES).map(NAME_TO_USER).cache();
+            final Observable<User> userList = Observable.fromIterable(USER_NAMES).map(NAME_TO_USER).cache();
             Set<User> separated = userList.toList()
-                    .flatMap(new Func1<List<User>, Observable<Set<User>>>() {
+                    .flatMap(new Function<List<User>, Single<Set<User>>>() {
                         @Override
-                        public Observable<Set<User>> call(List<User> users) {
-                            final Observable<User> from = Observable.from(users);
+                        public Single<Set<User>> apply(List<User> users) {
+                            final Observable<User> from = Observable.fromIterable(users);
                             return Observable
                                     .merge(from.filter(RxFunctions.not(CORRECT_NAME)),
                                             from.filter(IS_RETIRED), from.filter(IS_HIGH_INCOME))
                                     .collect(NEW_SET, SET_COLLECTOR);
                         }
-                    }).toBlocking().first();
-            final Func1<User, Boolean> mergeFilter =
+                    }).blockingGet();
+            final Predicate<User> mergeFilter =
                     RxFunctions.or(RxFunctions.not(CORRECT_NAME), IS_RETIRED, IS_HIGH_INCOME);
             Set<User> chained = userList.filter(mergeFilter).collect(NEW_SET, SET_COLLECTOR)
-                    .toBlocking().first();
+                    .blockingGet();
             Assert.assertEquals(separated, chained);
         }
     }
@@ -103,7 +113,7 @@ public class RxFunctionsTest {
     @Test
     public void testNot() throws Exception {
         User retired = new User("bla", "bla", 90, 10);
-        Assert.assertEquals(!IS_RETIRED.call(retired), RxFunctions.not(IS_RETIRED).call(retired));
+        Assert.assertEquals(!IS_RETIRED.test(retired), RxFunctions.not(IS_RETIRED).test(retired));
     }
 
     public static final class User {
@@ -150,90 +160,97 @@ public class RxFunctionsTest {
 
     public static final int ITERATIONS = 100;
 
-    private static final Func1<Integer, Integer> INCREMENT = new Func1<Integer, Integer>() {
+    private static final Function<Integer, Integer> INCREMENT = new Function<Integer, Integer>() {
         @Override
-        public Integer call(Integer integer) {
+        public Integer apply(Integer integer) {
             return integer + 1;
         }
     };
 
-    public static final Func1<String, User> NAME_TO_USER = new Func1<String, User>() {
+    public static final Function<String, User> NAME_TO_USER = new Function<String, User>() {
         @Override
-        public User call(String s) {
+        public User apply(String s) {
             return new User(s, s, (int)(Math.random() * 120), (float)Math.random() * 100000);
         }
     };
 
-    private static final Func2<Boolean, Boolean, Boolean> AND = new Func2<Boolean, Boolean, Boolean>() {
+    private static final BiFunction<Boolean, Boolean, Boolean> AND = new BiFunction<Boolean, Boolean, Boolean>() {
         @Override
-        public Boolean call(Boolean aBoolean, Boolean aBoolean2) {
+        public Boolean apply(Boolean aBoolean, Boolean aBoolean2) {
             return aBoolean && aBoolean2;
         }
     };
 
-    private static final Func1<User, Boolean> CORRECT_NAME = new Func1<User, Boolean>() {
+    private static final Predicate<User> CORRECT_NAME = new Predicate<User>() {
         @Override
-        public Boolean call(User user) {
+        public boolean test(User user) {
             return user.name.length() < 200 && user.surname.length() < 200;
         }
     };
 
-    private static final Func1<User, Boolean> IS_RETIRED = new Func1<User, Boolean>() {
+    private static final Predicate<User> IS_RETIRED = new Predicate<User> () {
         @Override
-        public Boolean call(User user) {
+        public boolean test(User user) {
             return user.age > 65;
         }
     };
 
-    private static final Func1<User, Boolean> IS_HIGH_INCOME = new Func1<User, Boolean>() {
+    private static final Predicate<User> IS_HIGH_INCOME = new Predicate<User> () {
         @Override
-        public Boolean call(User user) {
+        public boolean test(User user) {
             return user.income > 50000;
         }
     };
 
-    public static final Action2<Set<User>, User> SET_COLLECTOR = new Action2<Set<User>, User>() {
+    public static final BiConsumer<Set<User>, User> SET_COLLECTOR = new BiConsumer<Set<User>, User>() {
         @Override
-        public void call(Set<User> users, User user) {
+        public void accept(Set<User> users, User user) {
             users.add(user);
         }
     };
 
-    public static final Func0<Set<User>> NEW_SET = new Func0<Set<User>>() {
+    public static final Callable<Set<User>> NEW_SET = new Callable<Set<User>>() {
         @Override
         public Set<User> call() {
             return new HashSet<User>();
         }
     };
 
-    private static final Func1<Integer, String> TO_STRING = new Func1<Integer, String>() {
+    private static final Function<Integer, String> TO_STRING = new Function<Integer, String>() {
         @Override
-        public String call(Integer integer) {
+        public String apply(Integer integer) {
             return integer + "";
         }
     };
 
-    private static final Func1<String, Integer> TO_INT = new Func1<String, Integer>() {
+    private static final Function<String, Integer> TO_INT = new Function<String, Integer>() {
         @Override
-        public Integer call(String s) {
+        public Integer apply(String s) {
             return Integer.parseInt(s);
         }
     };
 
-    private static final Func4<String, String, Integer, Integer, User> TO_USER = new Func4<String, String, Integer, Integer, User>() {
+    private static final Function4<String, String, Integer, Integer, User> TO_USER = new Function4<String, String, Integer, Integer, User>() {
         @Override
-        public User call(String name, String surname, Integer age, Integer income) {
+        public User apply(String name, String surname, Integer age, Integer income) {
             return new User(name, surname, age, income);
         }
     };
 
-    private static final Func1<Integer, Integer> IDENTITY = new Func1<Integer, Integer>() {
+    private static final Function<Integer, Integer> IDENTITY = new Function<Integer, Integer>() {
         @Override
-        public Integer call(Integer integer) {
+        public Integer apply(Integer integer) {
             return integer;
         }
     };
 
     private static final List<String> USER_NAMES = Arrays.asList("One", "Deux", "Pintru",
             "Maurition", "That weird guy", "Megamon");
+
+    private static final BiFunction<Integer, Integer, Integer> BI_SUM = new BiFunction<Integer, Integer, Integer>() {
+        @Override
+        public Integer apply(Integer integer, Integer integer2) throws Exception {
+            return integer + integer2;
+        }
+    };
 }
