@@ -374,6 +374,15 @@ public final class RxFunctions {
         };
     }
 
+    public static <T> Predicate<T> not(final Predicate<T> func1) {
+        return new Predicate<T>() {
+            @Override
+            public boolean test(T t) throws Exception {
+                return !func1.test(t);
+            }
+        };
+    }
+
     @SuppressWarnings("unchecked")
     public static <T> Function<T, Boolean> and(final Function<T, Boolean> func1,
             final Function<T, Boolean> func2) {
@@ -432,6 +441,67 @@ public final class RxFunctions {
             final Function<T, Boolean> func6, final Function<T, Boolean> func7,
             final Function<T, Boolean> func8, final Function<T, Boolean> func9) {
         return reduceInternal(true, AND, func1, func2, func3, func4, func5, func6, func7, func8,
+                func9);
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <T> Predicate<T> and(final Predicate<T> func1,
+                                       final Predicate<T> func2) {
+        return predicateAndInternal(func1, func2);
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <T> Predicate<T> and(final Predicate<T> func1,
+                                       final Predicate<T> func2, final Predicate<T> func3) {
+        return predicateAndInternal(func1, func2, func3);
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <T> Predicate<T> and(final Predicate<T> func1,
+                                       final Predicate<T> func2, final Predicate<T> func3,
+                                       final Predicate<T> func4) {
+        return predicateAndInternal(func1, func2, func3, func4);
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <T> Predicate<T> and(final Predicate<T> func1,
+                                       final Predicate<T> func2, final Predicate<T> func3,
+                                       final Predicate<T> func4, final Predicate<T> func5) {
+        return predicateAndInternal(func1, func2, func3, func4, func5);
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <T> Predicate<T> and(final Predicate<T> func1,
+                                       final Predicate<T> func2, final Predicate<T> func3,
+                                       final Predicate<T> func4, final Predicate<T> func5,
+                                       final Predicate<T> func6) {
+        return predicateAndInternal(func1, func2, func3, func4, func5, func6);
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <T> Predicate<T> and(final Predicate<T> func1,
+                                       final Predicate<T> func2, final Predicate<T> func3,
+                                       final Predicate<T> func4, final Predicate<T> func5,
+                                       final Predicate<T> func6, final Predicate<T> func7) {
+        return predicateAndInternal(func1, func2, func3, func4, func5, func6, func7);
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <T> Predicate<T> and(final Predicate<T> func1,
+                                       final Predicate<T> func2, final Predicate<T> func3,
+                                       final Predicate<T> func4, final Predicate<T> func5,
+                                       final Predicate<T> func6, final Predicate<T> func7,
+                                       final Predicate<T> func8) {
+        return predicateAndInternal(func1, func2, func3, func4, func5, func6, func7, func8);
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <T> Predicate<T> and(final Predicate<T> func1,
+                                       final Predicate<T> func2, final Predicate<T> func3,
+                                       final Predicate<T> func4, final Predicate<T> func5,
+                                       final Predicate<T> func6, final Predicate<T> func7,
+                                       final Predicate<T> func8, final Predicate<T> func9) {
+        return predicateAndInternal(func1, func2, func3, func4, func5, func6, func7, func8,
                 func9);
     }
 
@@ -496,6 +566,67 @@ public final class RxFunctions {
                 func9);
     }
 
+    @SuppressWarnings("unchecked")
+    public static <T> Predicate<T> or(final Predicate<T> func1,
+                                      final Predicate<T> func2) {
+        return predicateOrInternal(func1, func2);
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <T> Predicate<T> or(final Predicate<T> func1,
+                                      final Predicate<T> func2, final Predicate<T> func3) {
+        return predicateOrInternal(func1, func2, func3);
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <T> Predicate<T> or(final Predicate<T> func1,
+                                      final Predicate<T> func2, final Predicate<T> func3,
+                                      final Predicate<T> func4) {
+        return predicateOrInternal(func1, func2, func3, func4);
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <T> Predicate<T> or(final Predicate<T> func1,
+                                      final Predicate<T> func2, final Predicate<T> func3,
+                                      final Predicate<T> func4, final Predicate<T> func5) {
+        return predicateOrInternal(func1, func2, func3, func4, func5);
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <T> Predicate<T> or(final Predicate<T> func1,
+                                      final Predicate<T> func2, final Predicate<T> func3,
+                                      final Predicate<T> func4, final Predicate<T> func5,
+                                      final Predicate<T> func6) {
+        return predicateOrInternal(func1, func2, func3, func4, func5, func6);
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <T> Predicate<T> or(final Predicate<T> func1,
+                                      final Predicate<T> func2, final Predicate<T> func3,
+                                      final Predicate<T> func4, final Predicate<T> func5,
+                                      final Predicate<T> func6, final Predicate<T> func7) {
+        return predicateOrInternal(func1, func2, func3, func4, func5, func6, func7);
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <T> Predicate<T> or(final Predicate<T> func1,
+                                      final Predicate<T> func2, final Predicate<T> func3,
+                                      final Predicate<T> func4, final Predicate<T> func5,
+                                      final Predicate<T> func6, final Predicate<T> func7,
+                                      final Predicate<T> func8) {
+        return predicateOrInternal(func1, func2, func3, func4, func5, func6, func7, func8);
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <T> Predicate<T> or(final Predicate<T> func1,
+                                      final Predicate<T> func2, final Predicate<T> func3,
+                                      final Predicate<T> func4, final Predicate<T> func5,
+                                      final Predicate<T> func6, final Predicate<T> func7,
+                                      final Predicate<T> func8, final Predicate<T> func9) {
+        return predicateOrInternal(func1, func2, func3, func4, func5, func6, func7, func8,
+                func9);
+    }
+
     private static <T, R> Function<T, R> reduceInternal(final R initial, final BiFunction<R, R, R> compose,
                                                         final Function<T, R>... actions) {
         return new Function<T, R>() {
@@ -511,138 +642,7 @@ public final class RxFunctions {
         };
     }
 
-    public static <T> Predicate<T> not(final Predicate<T> func1) {
-        return new Predicate<T>() {
-            @Override
-            public boolean test(T t) throws Exception {
-                return !func1.test(t);
-            }
-        };
-    }
-
-    @SuppressWarnings("unchecked")
-    public static <T> Predicate<T> and(final Predicate<T> func1,
-                                               final Predicate<T> func2) {
-        return andInternal(func1, func2);
-    }
-
-    @SuppressWarnings("unchecked")
-    public static <T> Predicate<T> and(final Predicate<T> func1,
-                                               final Predicate<T> func2, final Predicate<T> func3) {
-        return andInternal(func1, func2, func3);
-    }
-
-    @SuppressWarnings("unchecked")
-    public static <T> Predicate<T> and(final Predicate<T> func1,
-                                               final Predicate<T> func2, final Predicate<T> func3,
-                                               final Predicate<T> func4) {
-        return andInternal(func1, func2, func3, func4);
-    }
-
-    @SuppressWarnings("unchecked")
-    public static <T> Predicate<T> and(final Predicate<T> func1,
-                                               final Predicate<T> func2, final Predicate<T> func3,
-                                               final Predicate<T> func4, final Predicate<T> func5) {
-        return andInternal(func1, func2, func3, func4, func5);
-    }
-
-    @SuppressWarnings("unchecked")
-    public static <T> Predicate<T> and(final Predicate<T> func1,
-                                               final Predicate<T> func2, final Predicate<T> func3,
-                                               final Predicate<T> func4, final Predicate<T> func5,
-                                               final Predicate<T> func6) {
-        return andInternal(func1, func2, func3, func4, func5, func6);
-    }
-
-    @SuppressWarnings("unchecked")
-    public static <T> Predicate<T> and(final Predicate<T> func1,
-                                               final Predicate<T> func2, final Predicate<T> func3,
-                                               final Predicate<T> func4, final Predicate<T> func5,
-                                               final Predicate<T> func6, final Predicate<T> func7) {
-        return andInternal(func1, func2, func3, func4, func5, func6, func7);
-    }
-
-    @SuppressWarnings("unchecked")
-    public static <T> Predicate<T> and(final Predicate<T> func1,
-                                               final Predicate<T> func2, final Predicate<T> func3,
-                                               final Predicate<T> func4, final Predicate<T> func5,
-                                               final Predicate<T> func6, final Predicate<T> func7,
-                                               final Predicate<T> func8) {
-        return andInternal(func1, func2, func3, func4, func5, func6, func7, func8);
-    }
-
-    @SuppressWarnings("unchecked")
-    public static <T> Predicate<T> and(final Predicate<T> func1,
-                                               final Predicate<T> func2, final Predicate<T> func3,
-                                               final Predicate<T> func4, final Predicate<T> func5,
-                                               final Predicate<T> func6, final Predicate<T> func7,
-                                               final Predicate<T> func8, final Predicate<T> func9) {
-        return andInternal(func1, func2, func3, func4, func5, func6, func7, func8,
-                func9);
-    }
-
-    @SuppressWarnings("unchecked")
-    public static <T> Predicate<T> or(final Predicate<T> func1,
-                                              final Predicate<T> func2) {
-        return orInternal(func1, func2);
-    }
-
-    @SuppressWarnings("unchecked")
-    public static <T> Predicate<T> or(final Predicate<T> func1,
-                                              final Predicate<T> func2, final Predicate<T> func3) {
-        return orInternal(func1, func2, func3);
-    }
-
-    @SuppressWarnings("unchecked")
-    public static <T> Predicate<T> or(final Predicate<T> func1,
-                                              final Predicate<T> func2, final Predicate<T> func3,
-                                              final Predicate<T> func4) {
-        return orInternal(func1, func2, func3, func4);
-    }
-
-    @SuppressWarnings("unchecked")
-    public static <T> Predicate<T> or(final Predicate<T> func1,
-                                              final Predicate<T> func2, final Predicate<T> func3,
-                                              final Predicate<T> func4, final Predicate<T> func5) {
-        return orInternal(func1, func2, func3, func4, func5);
-    }
-
-    @SuppressWarnings("unchecked")
-    public static <T> Predicate<T> or(final Predicate<T> func1,
-                                              final Predicate<T> func2, final Predicate<T> func3,
-                                              final Predicate<T> func4, final Predicate<T> func5,
-                                              final Predicate<T> func6) {
-        return orInternal(func1, func2, func3, func4, func5, func6);
-    }
-
-    @SuppressWarnings("unchecked")
-    public static <T> Predicate<T> or(final Predicate<T> func1,
-                                              final Predicate<T> func2, final Predicate<T> func3,
-                                              final Predicate<T> func4, final Predicate<T> func5,
-                                              final Predicate<T> func6, final Predicate<T> func7) {
-        return orInternal(func1, func2, func3, func4, func5, func6, func7);
-    }
-
-    @SuppressWarnings("unchecked")
-    public static <T> Predicate<T> or(final Predicate<T> func1,
-                                              final Predicate<T> func2, final Predicate<T> func3,
-                                              final Predicate<T> func4, final Predicate<T> func5,
-                                              final Predicate<T> func6, final Predicate<T> func7,
-                                              final Predicate<T> func8) {
-        return orInternal(func1, func2, func3, func4, func5, func6, func7, func8);
-    }
-
-    @SuppressWarnings("unchecked")
-    public static <T> Predicate<T> or(final Predicate<T> func1,
-                                              final Predicate<T> func2, final Predicate<T> func3,
-                                              final Predicate<T> func4, final Predicate<T> func5,
-                                              final Predicate<T> func6, final Predicate<T> func7,
-                                              final Predicate<T> func8, final Predicate<T> func9) {
-        return orInternal(func1, func2, func3, func4, func5, func6, func7, func8,
-                func9);
-    }
-
-    private static <T> Predicate<T> orInternal(final Predicate<T>... predicates) {
+    private static <T> Predicate<T> predicateOrInternal(final Predicate<T>... predicates) {
         return new Predicate<T>() {
             @Override
             public boolean test(T t) throws Exception {
@@ -656,7 +656,7 @@ public final class RxFunctions {
         };
     }
 
-    private static <T> Predicate<T> andInternal(final Predicate<T>... predicates) {
+    private static <T> Predicate<T> predicateAndInternal(final Predicate<T>... predicates) {
         return new Predicate<T>() {
             @Override
             public boolean test(T t) throws Exception {
