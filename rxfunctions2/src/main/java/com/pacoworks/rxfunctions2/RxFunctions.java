@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.pacoworks.rxfunctions;
+package com.pacoworks.rxfunctions2;
 
 import rx.Observable;
 import rx.functions.*;

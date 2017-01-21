@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.pacoworks.rxfunctions;
+package com.pacoworks.rxfunctions2;
 
 import org.junit.Assert;
 import org.junit.Test;
